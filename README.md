@@ -75,7 +75,17 @@ Files are parsed in browser memory and are not sent to a server. Exported report
 
 ## Contributing
 
-Bug reports and format adapters are welcome. Please include a minimal synthetic JSON fixture rather than a real interview transcript.
+Bug reports, format adapters, and accessibility improvements are welcome. Please include a minimal synthetic JSON fixture rather than a real interview transcript.
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. By participating, you agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Project documents
+
+- [Changelog](CHANGELOG.md)
+- [Contributing guide](CONTRIBUTING.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Security policy](SECURITY.md)
+- [Support policy](SUPPORT.md)
 
 ## License
 

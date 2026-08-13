@@ -3,8 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "description": "Find the few seconds where speech-to-text engines disagree — entirely in your browser.",
+  "author": "Yuta Kiyohara",
   "license": "MIT",
   "repository": "github:kiyohara1021/transcript-lens",
+  "homepage": "https://transcript-lens.plan-k.chatgpt.site",
+  "bugs": {
+    "url": "https://github.com/kiyohara1021/transcript-lens/issues"
+  },
   "keywords": [
     "speech-to-text",
     "transcription",

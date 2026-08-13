@@ -1,0 +1,48 @@
+name: Bug report / 不具合報告
+description: Report a reproducible problem / 再現できる不具合を報告する
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for reporting a problem. Do not include private transcripts, credentials, or personal information.
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened? / 何が起きましたか？
+      description: Describe the actual and expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps / 再現手順
+      placeholder: |
+        1. Open...
+        2. Drop a synthetic JSON file...
+        3. See...
+    validations:
+      required: true
+  - type: textarea
+    id: sample
+    attributes:
+      label: Minimal synthetic JSON / 最小限の合成JSON
+      render: json
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version / ブラウザとバージョン
+      placeholder: Safari 20, Chrome 140, etc.
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist / 確認
+      options:
+        - label: I searched existing issues. / 既存Issueを検索しました。
+          required: true
+        - label: This report contains no real transcript or personal data. / 実際の文字起こしや個人情報を含みません。
+          required: true
+        - label: I agree to follow the Code of Conduct. / 行動規範に同意します。
+          required: true
