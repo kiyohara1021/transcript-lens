@@ -36,7 +36,7 @@ Transcript Lens は、文字バイグラムの類似度とタイムスタンプ�
 
 ## ローカルで動かす
 
-Node.js 22.13以降が必要です。
+Node.js 24 LTSが必要です。`nvm use`でリポジトリ指定のメジャーバージョンを選択できます。
 
 ```bash
 npm install
