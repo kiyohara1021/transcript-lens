@@ -11,6 +11,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - English and Japanese project documentation.
 - Issue forms, a pull request template, and automated dependency updates.
 
+### Changed
+
+- Standardized local development, CI, and Node.js type definitions on Node.js 24 LTS.
+
 ## [1.0.0] - 2026-08-14
 
 ### Added

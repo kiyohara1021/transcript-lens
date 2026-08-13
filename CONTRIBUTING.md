@@ -14,7 +14,7 @@ Thank you for helping improve Transcript Lens. Bug fixes, transcript format adap
 
 ### Development setup
 
-Requires Node.js 22.13 or later.
+Requires Node.js 24 LTS. Run `nvm use` to select the repository's pinned major version.
 
 ```bash
 npm install
@@ -51,7 +51,7 @@ Transcript Lensへのコントリビューションに関心を持っていた�
 
 ### 開発環境
 
-Node.js 22.13以降が必要です。
+Node.js 24 LTSが必要です。`nvm use`でリポジトリ指定のメジャーバージョンを選択できます。
 
 ```bash
 npm install

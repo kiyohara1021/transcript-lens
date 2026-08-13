@@ -26,7 +26,7 @@ A 60-minute interview does not need another 60-minute listen. Independent ASR en
 
 ## Try it locally
 
-Requires Node.js 22.13 or later.
+Requires Node.js 24 LTS. Run `nvm use` to select the repository's pinned major version.
 
 ```bash
 npm install
