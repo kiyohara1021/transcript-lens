@@ -1,5 +1,10 @@
 # Transcript Lens
 
+[![CI](https://github.com/kiyohara1021/transcript-lens/actions/workflows/ci.yml/badge.svg)](https://github.com/kiyohara1021/transcript-lens/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-c8ff3d.svg)](LICENSE)
+
+[English](README.md) | [日本語](README.ja.md)
+
 > Stop re-listening. Review the disagreement.
 
 Transcript Lens compares the timestamped JSON from two speech-to-text engines and creates a focused review queue for the moments where they disagree. Everything runs in the browser: transcripts are never uploaded.
