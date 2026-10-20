@@ -1,5 +1,16 @@
 import assert from "node:assert/strict";
+import { registerHooks } from "node:module";
 import test from "node:test";
+
+// The Worker bundle imports `cloudflare:workers`, which only the workerd runtime provides.
+registerHooks({
+  resolve(specifier, context, nextResolve) {
+    if (specifier === "cloudflare:workers") {
+      return { shortCircuit: true, url: "data:text/javascript,export const tracing = undefined;" };
+    }
+    return nextResolve(specifier, context);
+  },
+});
 
 async function render() {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
