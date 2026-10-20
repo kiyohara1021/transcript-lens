@@ -8,6 +8,13 @@ updates:
       time: "09:00"
       timezone: Asia/Tokyo
     open-pull-requests-limit: 5
+    ignore:
+      # Node.js 24 LTS に合わせて型定義を固定する
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+      # eslint-plugin-jsx-a11y が eslint 10 に対応するまで見送る
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
     groups:
       minor-and-patch:
         update-types:
