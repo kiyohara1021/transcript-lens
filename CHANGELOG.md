@@ -20,6 +20,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Reviewed marks are saved in this browser per pair of loaded files and come back after a reload, as the "saved on this device" label already promised.
 - Reviewed marks stay on the same row when the threshold changes. They were stored by position in the flagged list, so they moved to other rows.
 
+- Timestamp units (seconds or milliseconds) are decided once per file. The first seconds of a millisecond file were read as thousands of seconds. Keys such as `start_ms` are read as milliseconds, and the detected unit is shown after loading.
 
 ## [1.0.0] - 2026-08-14
 

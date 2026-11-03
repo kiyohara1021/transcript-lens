@@ -120,8 +120,10 @@ export default function TranscriptLens() {
   const loadFile = async (file: File, setter: (transcript: Transcript) => void) => {
     try {
       const data = JSON.parse(await file.text());
-      setter(parseTranscript(data, file.name));
-      setNotice(`${file.name} loaded locally. Nothing was uploaded.`);
+      const transcript = parseTranscript(data, file.name);
+      setter(transcript);
+      const units = transcript.timeUnit ? ` Timestamps read as ${transcript.timeUnit}.` : "";
+      setNotice(`${file.name} loaded locally.${units} Nothing was uploaded.`);
     } catch (error) {
       setNotice(error instanceof Error ? error.message : "Could not read that file.");
     }
