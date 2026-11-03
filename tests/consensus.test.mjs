@@ -21,7 +21,45 @@ test("parses common segment fields and millisecond timestamps", () => {
   assert.deepEqual(transcript, {
     name: "engine.json",
     segments: [{ start: 12, end: 15.5, text: "テスト", speaker: "A" }],
+    timeUnit: "milliseconds",
   });
+});
+
+test("decides milliseconds once per file, including the first seconds", () => {
+  const transcript = parseTranscript({ segments: [
+    { start: 0, end: 4000, text: "一" },
+    { start: 4000, end: 9000, text: "二" },
+    { start: 9000, end: 15000, text: "三" },
+  ]});
+
+  assert.equal(transcript.timeUnit, "milliseconds");
+  assert.deepEqual(transcript.segments.map(({ start, end }) => [start, end]), [[0, 4], [4, 9], [9, 15]]);
+});
+
+test("keeps a three-hour recording in seconds", () => {
+  const transcript = parseTranscript({ segments: [
+    { start: 0, end: 6, text: "冒頭" },
+    { start: 10_795, end: 10_800, text: "終わり" },
+  ]});
+
+  assert.equal(transcript.timeUnit, "seconds");
+  assert.deepEqual(transcript.segments.map(({ start, end }) => [start, end]), [[0, 6], [10_795, 10_800]]);
+});
+
+test("keeps a short file with one long segment in seconds", () => {
+  const transcript = parseTranscript({ segments: [{ start: 0, end: 90, text: "長い独白" }] });
+  assert.equal(transcript.timeUnit, "seconds");
+  assert.equal(transcript.segments[0].end, 90);
+});
+
+test("prefers key names that say milliseconds", () => {
+  const transcript = parseTranscript({ segments: [{ start_ms: 500, end_ms: 1500, text: "短い" }] });
+  assert.equal(transcript.timeUnit, "milliseconds");
+  assert.deepEqual([transcript.segments[0].start, transcript.segments[0].end], [0.5, 1.5]);
+});
+
+test("leaves the unit unset when the file has no timestamps", () => {
+  assert.equal(parseTranscript({ text: "全文だけ" }).timeUnit, undefined);
 });
 
 test("aligns by time and flags disagreement", () => {

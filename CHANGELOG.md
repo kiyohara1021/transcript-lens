@@ -15,6 +15,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 - Standardized local development, CI, and Node.js type definitions on Node.js 24 LTS.
 
+### Fixed
+
+- Timestamp units (seconds or milliseconds) are decided once per file. The first seconds of a millisecond file were read as thousands of seconds. Keys such as `start_ms` are read as milliseconds, and the detected unit is shown after loading.
+
+
 ## [1.0.0] - 2026-08-14
 
 ### Added
