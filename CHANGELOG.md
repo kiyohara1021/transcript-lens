@@ -15,6 +15,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 - Standardized local development, CI, and Node.js type definitions on Node.js 24 LTS.
 
+### Fixed
+
+- Reviewed marks are saved in this browser per pair of loaded files and come back after a reload, as the "saved on this device" label already promised.
+- Reviewed marks stay on the same row when the threshold changes. They were stored by position in the flagged list, so they moved to other rows.
+
+
 ## [1.0.0] - 2026-08-14
 
 ### Added
