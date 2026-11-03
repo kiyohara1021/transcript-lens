@@ -28,8 +28,12 @@ export type ConsensusRow = TranscriptSegment & {
 
 const punctuation = /[\s\p{P}]/gu;
 
+/**
+ * NFKC first, so full-width and half-width forms (８ / 8, ＡＩ / AI) compare equal,
+ * the same as asr-consensus does.
+ */
 export function canonical(text: string): string {
-  return String(text).replace(punctuation, "").toLowerCase();
+  return String(text).normalize("NFKC").replace(punctuation, "").toLowerCase();
 }
 
 export function similarity(leftText: string, rightText: string): number {

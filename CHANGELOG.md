@@ -17,6 +17,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ### Fixed
 
+- Agreement scores ignore full-width and half-width differences (８ / 8, ＡＩ / AI, ｶﾅ / カナ) by applying Unicode NFKC before comparing.
+
 - Reviewed marks are saved in this browser per pair of loaded files and come back after a reload, as the "saved on this device" label already promised.
 - Reviewed marks stay on the same row when the threshold changes. They were stored by position in the flagged list, so they moved to other rows.
 
