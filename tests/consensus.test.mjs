@@ -8,6 +8,12 @@ import {
   timestamp,
 } from "../app/lib/consensus.ts";
 
+test("similarity ignores full-width and half-width differences", () => {
+  assert.equal(similarity("確認時間は週に８時間から１時間半まで減りました。", "確認時間は週に8時間から1時間半まで減りました"), 1);
+  assert.equal(similarity("ＡＩで要約する", "AIで要約する"), 1);
+  assert.equal(similarity("ｶﾀｶﾅの表記", "カタカナの表記"), 1);
+});
+
 test("similarity ignores Japanese punctuation and spacing", () => {
   assert.equal(similarity("今日は、晴れです。", "今日は晴れです"), 1);
   assert.ok(similarity("請求処理", "集計処理") < 0.72);
