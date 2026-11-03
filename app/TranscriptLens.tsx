@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, DragEvent, useMemo, useRef, useState } from "react";
+import { ChangeEvent, DragEvent, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import {
   compareTranscripts,
   createMarkdown,
@@ -9,6 +9,7 @@ import {
   type ConsensusRow,
   type Transcript,
 } from "./lib/consensus";
+import { parseReviewed, reviewedSnapshot, reviewStorageKey, storeReviewed, subscribeReviewed } from "./lib/review-state";
 
 const demoPrimary: Transcript = {
   name: "whisper.json",
@@ -97,7 +98,6 @@ export default function TranscriptLens() {
   const [primary, setPrimary] = useState(demoPrimary);
   const [comparison, setComparison] = useState(demoOther);
   const [threshold, setThreshold] = useState(72);
-  const [resolved, setResolved] = useState<Set<number>>(new Set());
   const [showAll, setShowAll] = useState(false);
   const [notice, setNotice] = useState("Demo loaded — replace either file with your own JSON.");
 
@@ -106,6 +106,12 @@ export default function TranscriptLens() {
     [primary, comparison, threshold],
   );
   const reviewRows = rows.filter((row) => row.flagged);
+  // Marks are kept per pair of loaded files in localStorage. The server snapshot is empty,
+  // so the server render and the first client render match before stored marks appear.
+  const storageKey = useMemo(() => reviewStorageKey(primary, comparison), [primary, comparison]);
+  const storedReview = useSyncExternalStore(subscribeReviewed, () => reviewedSnapshot(storageKey), () => "");
+  const resolved = useMemo(() => parseReviewed(storedReview), [storedReview]);
+  const reviewedCount = reviewRows.filter((row) => resolved.has(rows.indexOf(row))).length;
   const visibleRows = showAll ? rows : reviewRows;
   const duration = Math.max(...primary.segments.map((segment) => segment.end));
   const reviewDuration = reviewRows.reduce((total, row) => total + row.end - row.start, 0);
@@ -116,7 +122,6 @@ export default function TranscriptLens() {
       const data = JSON.parse(await file.text());
       const transcript = parseTranscript(data, file.name);
       setter(transcript);
-      setResolved(new Set());
       const units = transcript.timeUnit ? ` Timestamps read as ${transcript.timeUnit}.` : "";
       setNotice(`${file.name} loaded locally.${units} Nothing was uploaded.`);
     } catch (error) {
@@ -124,13 +129,11 @@ export default function TranscriptLens() {
     }
   };
 
-  const toggleResolved = (index: number) => {
-    setResolved((current) => {
-      const next = new Set(current);
-      if (next.has(index)) next.delete(index);
-      else next.add(index);
-      return next;
-    });
+  const toggleResolved = (rowIndex: number) => {
+    const next = new Set(resolved);
+    if (next.has(rowIndex)) next.delete(rowIndex);
+    else next.add(rowIndex);
+    storeReviewed(storageKey, next);
   };
 
   const downloadReport = () => {
@@ -177,7 +180,6 @@ export default function TranscriptLens() {
           <button className="demo-button" type="button" onClick={() => {
             setPrimary(demoPrimary);
             setComparison(demoOther);
-            setResolved(new Set());
             setNotice("Demo restored.");
           }}>Reset demo</button>
         </div>
@@ -217,7 +219,7 @@ export default function TranscriptLens() {
           <article><span>Audio length</span><strong>{timestamp(duration)}</strong><small>{rows.length} aligned segments</small></article>
           <article className="accent-card"><span>Needs review</span><strong>{reviewRows.length}</strong><small>{timestamp(reviewDuration)} of audio</small></article>
           <article><span>Listening avoided</span><strong>{savedPercent}%</strong><small>based on flagged duration</small></article>
-          <article><span>Reviewed</span><strong>{resolved.size}<i>/{reviewRows.length}</i></strong><small>saved on this device</small></article>
+          <article><span>Reviewed</span><strong>{reviewedCount}<i>/{reviewRows.length}</i></strong><small>saved on this device</small></article>
         </div>
 
         <div className="timeline-card" id="how">
@@ -253,8 +255,7 @@ export default function TranscriptLens() {
             <div className="empty-state"><strong>Everything aligns.</strong><span>Raise the threshold to inspect smaller differences.</span></div>
           ) : visibleRows.map((row: ConsensusRow) => {
             const rowIndex = rows.indexOf(row);
-            const reviewIndex = reviewRows.indexOf(row);
-            const isResolved = resolved.has(reviewIndex);
+            const isResolved = resolved.has(rowIndex);
             return (
               <article className={`review-card ${isResolved ? "resolved" : ""}`} key={`${row.start}-${row.text}`}>
                 <div className="review-meta">
@@ -268,7 +269,7 @@ export default function TranscriptLens() {
                   <div><span className="source-name"><i className="source-dot violet" />{comparison.name}</span><p>{row.comparisons[0]?.text || <em>No overlapping segment</em>}</p></div>
                 </div>
                 {row.flagged && (
-                  <button className="resolve-button" type="button" onClick={() => toggleResolved(reviewIndex)}>
+                  <button className="resolve-button" type="button" onClick={() => toggleResolved(rowIndex)}>
                     <span aria-hidden="true">{isResolved ? "✓" : "○"}</span>{isResolved ? "Reviewed" : "Mark reviewed"}
                   </button>
                 )}
